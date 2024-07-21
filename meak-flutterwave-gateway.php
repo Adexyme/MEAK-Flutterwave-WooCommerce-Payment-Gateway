@@ -87,8 +87,8 @@ function meak_flutterwave_register_order_approval_payment_method_type()
     add_action(
         'woocommerce_blocks_payment_method_type_registration',
         function (Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry) {
-            // Register an instance of My_Custom_Gateway_Blocks
-            $payment_method_registry->register(new My_Custom_Gateway_Blocks);
+            // Register an instance of Meak_Flutterwave_Gateway_Blocks
+            $payment_method_registry->register(new Meak_Flutterwave_Gateway_Blocks);
         }
     );
 }

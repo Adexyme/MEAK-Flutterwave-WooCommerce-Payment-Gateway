@@ -14,9 +14,9 @@ class Meak_Flutterwave_Gateway extends WC_Payment_Gateway
 
         $this->id = 'meak_flutterwave_gateway';
         $this->icon = 'https://www.raastid.com/assets/images/logoIcon/light_logo.png';
-        $this->method_title = __('MEAK Flutterwave Custom Gateway', 'my-custom-gateway');
+        $this->method_title = __('MEAK Flutterwave Custom Gateway', 'my-flutterwave-gateway');
         $this->method_description = __('Accept payments through Flutterwave numerous Online/Offline Payment Options - Credit Cards, USSD, Bank Transfer, Payment Link, Virtual Account e.t.c. <br>
-    <b>Note: </b>Please add the following URL to Your Flutterwave dashboard WebHook Option: <b><i>' . get_site_url() . '/wc-api/squad_webhook</i></b>', 'my-custom-gateway');
+    <b>Note: </b>Please add the following URL to Your Flutterwave dashboard WebHook Option: <b><i>' . get_site_url() . '/wc-api/flutterwave_webhook</i></b>', 'my-flutterwave-gateway');
 
         // Other initialization code goes here
         $this->order_id_prepend = 'MEAK';
@@ -43,9 +43,9 @@ class Meak_Flutterwave_Gateway extends WC_Payment_Gateway
         $this->public_key = ($this->testmode == 'yes') ? $this->test_publishable_key : $this->publishable_key;
         $this->secret_key = ($this->testmode == 'yes') ? $this->test_private_key : $this->private_key;
 
-        $this->payment_init_url = ($this->testmode == 'yes') ? 'https://sandbox-api-d.squadco.com/transaction/initiate' : 'https://api-d.squadco.com/transaction/initiate';
+        $this->payment_init_url = ($this->testmode == 'yes') ? 'https://sandbox-api-d.flutterwaveco.com/transaction/initiate' : 'https://api-d.flutterwaveco.com/transaction/initiate';
 
-        $this->payment_verification_url_stub = 'https://sandbox-api-d.squadco.com/transaction/verify/';
+        $this->payment_verification_url_stub = 'https://sandbox-api-d.flutterwaveco.com/transaction/verify/';
 
         if (empty($this->success_url) || $this->success_url == null) {
             $this->success_url = get_site_url();
@@ -62,10 +62,10 @@ class Meak_Flutterwave_Gateway extends WC_Payment_Gateway
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
 
         // Register a callback url to be called immediately payment is successful, allowing to navigate back to the app for appropriate notification and processing.
-        add_action('woocommerce_api_squad_success_callback', array($this, 'success_callback_url'));
+        add_action('woocommerce_api_flutterwave_success_callback', array($this, 'success_callback_url'));
 
         // Register a webhook for payment success notification - this can be called by the Pay Proccessor any time and may be done more than once after payment
-        add_action('woocommerce_api_squad_webhook', array($this, 'webhook'));
+        add_action('woocommerce_api_flutterwave_webhook', array($this, 'webhook'));
 
     }
 
@@ -79,22 +79,22 @@ class Meak_Flutterwave_Gateway extends WC_Payment_Gateway
 
         $this->form_fields = array(
             'enabled' => array(
-                'title' => __('Enable/Disable', 'my-custom-gateway'),
+                'title' => __('Enable/Disable', 'my-flutterwave-gateway'),
                 'type' => 'checkbox',
-                'label' => __('Enable My Custom Gateway', 'my-custom-gateway'),
+                'label' => __('Enable My Custom Gateway', 'my-flutterwave-gateway'),
                 'default' => 'yes',
             ),
             'title' => array(
-                'title' => __('Title', 'my-custom-gateway'),
+                'title' => __('Title', 'my-flutterwave-gateway'),
                 'type' => 'text',
-                'description' => __('This controls the title which the user sees during checkout.', 'my-custom-gateway'),
+                'description' => __('This controls the title which the user sees during checkout.', 'my-flutterwave-gateway'),
                 'default' => 'Flutterwave',
                 'desc_tip' => true,
             ),
             'description' => array(
                 'title' => __('Description'),
                 'type' => 'textarea',
-                'description' => __('This controls the description which the user sees during checkout.', 'my-custom-gateway'),
+                'description' => __('This controls the description which the user sees during checkout.', 'my-flutterwave-gateway'),
                 'default' => 'Make payment using any of Flutterwave multiple payment channels',
             ),
             'testmode' => array(
@@ -106,43 +106,43 @@ class Meak_Flutterwave_Gateway extends WC_Payment_Gateway
             ),
             'success_url' => array(
                 'title' => __('Success URL'),
-                'description' => __('This is the URL where Flutterwave will redirect after payment was SUCCESSFUL. If you leave this field empty, it will be redirected to your site. Example: https://www.example.com/', 'my-custom-gateway'),
+                'description' => __('This is the URL where Flutterwave will redirect after payment was SUCCESSFUL. If you leave this field empty, it will be redirected to your site. Example: https://www.example.com/', 'my-flutterwave-gateway'),
                 'type' => 'text',
-                'default' => get_site_url() . '/wc-api/squad_success_callback'
+                'default' => get_site_url() . '/wc-api/flutterwave_success_callback'
             ),
             'cancel_url' => array(
                 'title' => __('Cancel URL'),
-                'description' => __('This is the URL where Flutterwave will redirect if payment was CANCELLED. If you leave this field empty, it will be redirected to your site. Example: https://www.example.com/', 'my-custom-gateway'),
+                'description' => __('This is the URL where Flutterwave will redirect if payment was CANCELLED. If you leave this field empty, it will be redirected to your site. Example: https://www.example.com/', 'my-flutterwave-gateway'),
                 'type' => 'text',
                 'default' => ''
             ),
             'logo_url' => array(
                 'title' => __('Logo Url'),
-                'description' => __('Your Site Logo URL. If you leave this field empty, it will use Flutterwave icon.  Example: https://www.example.com/image.png', 'my-custom-gateway'),
+                'description' => __('Your Site Logo URL. If you leave this field empty, it will use Flutterwave icon.  Example: https://www.example.com/image.png', 'my-flutterwave-gateway'),
                 'type' => 'text',
-                'default' => 'http://localhost/wp_takora/wp-content/plugins/squad-payment-gateway/assets/images/logo.png'
+                'default' => 'http://localhost/wp_takora/wp-content/plugins/flutterwave-payment-gateway/assets/images/logo.png'
             ),
             'publishable_key' => array(
                 'title' => __('Public Key'),
-                'description' => __('Your Flutterwave Public Key', 'my-custom-gateway'),
+                'description' => __('Your Flutterwave Public Key', 'my-flutterwave-gateway'),
                 'type' => 'text',
                 'default' => ''
             ),
             'private_key' => array(
                 'title' => __('Private Key'),
-                'description' => __('Your Flutterwave Private Key', 'my-custom-gateway'),
+                'description' => __('Your Flutterwave Private Key', 'my-flutterwave-gateway'),
                 'type' => 'password',
                 'default' => ''
             ),
             'test_publishable_key' => array(
                 'title' => __('Public test Key'),
-                'description' => __('Your Flutterwave Public test Key', 'my-custom-gateway'),
+                'description' => __('Your Flutterwave Public test Key', 'my-flutterwave-gateway'),
                 'type' => 'text',
                 'default' => ''
             ),
             'test_private_key' => array(
                 'title' => __('Private Key'),
-                'description' => __('Your Flutterwave Private test Key', 'my-custom-gateway'),
+                'description' => __('Your Flutterwave Private test Key', 'my-flutterwave-gateway'),
                 'type' => 'password',
                 'default' => ''
             )
@@ -173,7 +173,7 @@ class Meak_Flutterwave_Gateway extends WC_Payment_Gateway
         //if($order->get_currency() != 'NGN' || $order->get_currency() != 'USD') die('Your currency is not supported by Flutterwave - maak_payment_gateway/process_payment') ;
 
         //$wc_logger->debug('debug tracker2 : made request', array('source' => 'MAAK Debug'));
-        $squad_payment_params = array(
+        $flutterwave_payment_params = array(
             'amount' => absint($amount),
             'email' => $order->get_billing_email(),
             'currency' => $order->get_currency(),
@@ -192,16 +192,16 @@ class Meak_Flutterwave_Gateway extends WC_Payment_Gateway
         $args = array(
             'headers' => $headers,
             'timeout' => 60,
-            'body' => json_encode($squad_payment_params)
+            'body' => json_encode($flutterwave_payment_params)
         );
 
-        $squad_payment_init_url = $this->payment_init_url;
+        $flutterwave_payment_init_url = $this->payment_init_url;
 
         //$wc_logger->debug('inside process_payment x : payload' . print_r($args, true), array('source' => 'MAAK Debug'));
 
-        //$wc_logger->debug('inside process_payment y : url: ' . $squad_payment_init_url, array('source' => 'MAAK Debug'));
+        //$wc_logger->debug('inside process_payment y : url: ' . $flutterwave_payment_init_url, array('source' => 'MAAK Debug'));
 
-        $request = wp_remote_post($squad_payment_init_url, $args);
+        $request = wp_remote_post($flutterwave_payment_init_url, $args);
 
         // $wc_logger->debug( 'debug tracker4 : error code:'.wp_remote_retrieve_response_code( $request ), array( 'source' => 'MAAK Debug' ) );
 
@@ -209,11 +209,11 @@ class Meak_Flutterwave_Gateway extends WC_Payment_Gateway
 
         if (!is_wp_error($request) && 200 === wp_remote_retrieve_response_code($request)) {
 
-            $squad_response = json_decode(wp_remote_retrieve_body($request));
+            $flutterwave_response = json_decode(wp_remote_retrieve_body($request));
             //$wc_logger->debug('inside process_payment 3 : request succeed', array('source' => 'MAAK Debug'));
             return array(
                 'result' => 'success',
-                'redirect' => $squad_response->data->checkout_url,
+                'redirect' => $flutterwave_response->data->checkout_url,
             );
 
         } else {
@@ -257,24 +257,24 @@ class Meak_Flutterwave_Gateway extends WC_Payment_Gateway
 
         if (!is_wp_error($request) && 200 === wp_remote_retrieve_response_code($request)) {
 
-            $squad_response = json_decode(wp_remote_retrieve_body($request));
+            $flutterwave_response = json_decode(wp_remote_retrieve_body($request));
             //$wc_logger->debug('inside verify_payment 1 : request succeed', array('source' => 'MAAK Verify Payment Debug'));
 
-            if ($squad_response->status == 200 && strtolower($squad_response->data->transaction_status) == 'success') {
-                $squad_response = json_decode(wp_remote_retrieve_body($request));
+            if ($flutterwave_response->status == 200 && strtolower($flutterwave_response->data->transaction_status) == 'success') {
+                $flutterwave_response = json_decode(wp_remote_retrieve_body($request));
 
                 //$wc_logger->debug('inside verify_payment  : request succeed 2', array('source' => 'MAAK Verify Payment Debug'));
 
                 return array(
                     'status' => true,
-                    'amount_paid' => $squad_response->data->transaction_amount,
-                    'currency_symbol' => $squad_response->data->transaction_currency_id
+                    'amount_paid' => $flutterwave_response->data->transaction_amount,
+                    'currency_symbol' => $flutterwave_response->data->transaction_currency_id
                 );
 
 
             } else {
 
-                $squad_response = json_decode(wp_remote_retrieve_body($request));
+                $flutterwave_response = json_decode(wp_remote_retrieve_body($request));
 
                 //$wc_logger->debug('inside verify_payment else : request failed 2', array('source' => 'MAAK Verify Payment Debug'));
 
