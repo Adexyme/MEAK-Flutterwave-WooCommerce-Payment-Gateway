@@ -59,10 +59,10 @@ function declare_meak_flutterwave_cart_checkout_blocks_compatibility()
     }
 }
 // Hook the custom function to the 'before_woocommerce_init' action
-add_action('before_woocommerce_init', 'declare_meak_flutterwave_cart_checkout_blocks_compatibility');
+//add_action('before_woocommerce_init', 'declare_meak_flutterwave_cart_checkout_blocks_compatibility');
 
 // Hook the custom function to the 'woocommerce_blocks_loaded' action
-add_action('woocommerce_blocks_loaded', 'meak_flutterwave_register_order_approval_payment_method_type');
+//add_action('woocommerce_blocks_loaded', 'meak_flutterwave_register_order_approval_payment_method_type');
 
 /**
  * Custom function to register a payment method type
