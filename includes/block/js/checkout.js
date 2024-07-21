@@ -9,7 +9,7 @@ const Content = () => {
   return window.wp.htmlEntities.decodeEntities(settings.description || "");
 };
 const Block_Gateway = {
-  name: "my_custom_gateway",
+  name: "meak_flutterwave_gateway",
   label: label,
   content: Object(window.wp.element.createElement)(Content, null),
   edit: Object(window.wp.element.createElement)(Content, null),
