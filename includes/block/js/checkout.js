@@ -4,7 +4,7 @@ const settings = window.wc.wcSettings.getSetting(
 );
 const label =
   window.wp.htmlEntities.decodeEntities(settings.title) ||
-  window.wp.i18n.__("My Custom Gateway", "my_custom_gateway");
+  window.wp.i18n.__("Meak Flutterwave Gateway", "meak_flutterwave_gateway");
 const Content = () => {
   return window.wp.htmlEntities.decodeEntities(settings.description || "");
 };
