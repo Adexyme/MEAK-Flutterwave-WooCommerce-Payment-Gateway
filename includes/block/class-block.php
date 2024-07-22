@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
 
-final class Meak_Flutterwave_Gateway_Blocks extends AbstractPaymentMethodType
+final class Meak_Flutterwave_Gateway_Block extends AbstractPaymentMethodType
 {
 
     private $gateway;
