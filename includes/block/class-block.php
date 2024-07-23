@@ -39,7 +39,7 @@ final class Meak_Flutterwave_Gateway_Block extends AbstractPaymentMethodType
     {
 
         wp_register_script(
-            'meak-flutterwave-gateway-blocks-integration',
+            'meak_flutterwave_gateway-blocks-integration',
             plugin_dir_url(__FILE__) . '/js/checkout.js',
             [
                 'wc-blocks-registry',
@@ -52,10 +52,10 @@ final class Meak_Flutterwave_Gateway_Block extends AbstractPaymentMethodType
             true
         );
         if (function_exists('wp_set_script_translations')) {
-            wp_set_script_translations('meak-flutterwave-gateway-blocks-integration');
+            wp_set_script_translations('meak_flutterwave_gateway-blocks-integration');
 
         }
-        return ['meak-flutterwave-gateway-blocks-integration'];
+        return ['meak_flutterwave_gateway-blocks-integration'];
     }
 
     /**
